@@ -1,0 +1,30 @@
+[package]
+name = "witchit-plus"
+version = "0.1.0"
+edition = "2021"
+description = "Witch It+ launcher: mods, versions, presets and launching the game"
+
+[[bin]]
+name = "witchit-plus"
+path = "src/main.rs"
+
+[dependencies]
+eframe = { version = "0.33", default-features = false, features = ["default_fonts", "glow", "x11", "wayland"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+
+# HTTPS: the system's TLS on Windows (no C compiler needed to build it), rustls elsewhere.
+[target.'cfg(windows)'.dependencies]
+ureq = { version = "2", default-features = false, features = ["native-tls"] }
+native-tls = "0.2"
+windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_Security_Cryptography"] }
+
+[target.'cfg(not(windows))'.dependencies]
+ureq = { version = "2", default-features = false, features = ["tls"] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+strip = true
